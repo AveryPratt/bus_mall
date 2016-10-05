@@ -48,8 +48,6 @@ render();
 
 
 
-
-
 function render() {
   var imgRandom = function() {
     for (var i = 0; i < productImg.length; i++) {
@@ -58,15 +56,15 @@ function render() {
       rightImg = Math.floor(Math.random() * productImg.length);
       newImg = [];
       newImg.push(leftImg, centerImg, rightImg);
-      left.setAttribute('src', leftImg.path);
-      middle.setAttribute('src', centerImg.path);
-      right.setAttribute('src', rightImg.path);
+
     }
+    imgRandom();
+    left.setAttribute('src', leftImg.path);
+    middle.setAttribute('src', centerImg.path);
+    right.setAttribute('src', rightImg.path);
   };
-  imgRandom();
   //checking for duplicate images
   while ((leftImg === centerImg) || (centerImg === rightImg) || (leftImg === rightImg) || newImg[0] === previousImages[0] || newImg[0] === previousImages[1] || newImg[0] === previousImages[2] || newImg[1] === previousImages[0] || newImg[1] === previousImages[1] || newImg[1] === previousImages[2] || newImg[2] === previousImages[0] || newImg[2] === previousImages[1] || newImg[2] === previousImages[2]) {
     imgRandom();
   }
 }
-console.log(newImg);
