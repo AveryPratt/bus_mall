@@ -50,19 +50,16 @@ render();
 
 function render() {
   var imgRandom = function() {
-    for (var i = 0; i < productImg.length; i++) {
-      leftImg = Math.floor(Math.random() * productImg.length);
-      centerImg = Math.floor(Math.random() * productImg.length);
-      rightImg = Math.floor(Math.random() * productImg.length);
-      newImg = [];
-      newImg.push(leftImg, centerImg, rightImg);
-
-    }
-    imgRandom();
-    left.setAttribute('src', leftImg.path);
-    middle.setAttribute('src', centerImg.path);
-    right.setAttribute('src', rightImg.path);
+    leftImg = Math.floor(Math.random() * productImg.length);
+    centerImg = Math.floor(Math.random() * productImg.length);
+    rightImg = Math.floor(Math.random() * productImg.length);
+    newImg = [];
+    newImg.push(leftImg, centerImg, rightImg);
   };
+  imgRandom();
+  productImg[leftImg];
+
+
   //checking for duplicate images
   while ((leftImg === centerImg) || (centerImg === rightImg) || (leftImg === rightImg) || newImg[0] === previousImages[0] || newImg[0] === previousImages[1] || newImg[0] === previousImages[2] || newImg[1] === previousImages[0] || newImg[1] === previousImages[1] || newImg[1] === previousImages[2] || newImg[2] === previousImages[0] || newImg[2] === previousImages[1] || newImg[2] === previousImages[2]) {
     imgRandom();
