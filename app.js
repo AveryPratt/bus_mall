@@ -7,6 +7,11 @@ var previousImages = [];
 var left = document.getElementById('left');
 var middle = document.getElementById('middle');
 var right = document.getElementById('right');
+var totalClicks = 0;
+var canvas = document.getElementById('canvas');
+
+var context = canvas.getContext('2d');
+
 
 var leftImg;
 var centerImg;
@@ -41,11 +46,10 @@ function Product(imgName, path, views, clicks) {
   productImg.push(this);
 };
 
-function turnArrayIntoImages(product, img){
+function turnArrayIntoImages(product, img) {
   var att = document.createAttribute('src');
   att.value = product.path;
   img.setAttributeNode(att);
-  // left.setAttribute();
 }
 
 function render() {
@@ -66,4 +70,91 @@ function render() {
   turnArrayIntoImages(productImg[rightImg], right);
 }
 
+function handleImageClick(event) {
+  var clickedProduct;
+  switch (event.target.id) {
+  case 'left':
+    clickedProduct = productImg[newImg[0]];
+    break;
+  case 'middle':
+    clickedProduct = productImg[newImg[1]];
+    break;
+  case 'right':
+    clickedProduct = productImg[newImg[2]];
+    break;
+  }
+  clickedProduct.click += 1;
+  totalClicks += 1;
+  if (totalClicks >= 25) {
+    showResuts();
+    imgContainer.removeEventListener('click', handleImageClick);
+    displayChart();
+    storeLocalData();
+  } else {
+    render();
+
+  }
+}
+
+function storeLocalData(){
+  var dataString = JSON.stringify(productImg);
+  localStorage.setItem('data', dataString);
+}
+
+function retrieveLocalData(){
+  var dataString = localStorage.getItem('data');
+  if(dataString){
+    var data = JSON.parse(dataString);
+    productImg = data;
+  }
+}
+
+function showResuts() {
+
+  for (var i = 0; i < productImg.length; i++) {
+    console.log(productImg[i].imgName + ';' + productImg[i].click + '/' + productImg[i].views);
+  }
+
+}
+
+function displayChart() {
+  var clickBackroundColors = [];
+  var hoverColors = [];
+  for (var i = 0; i < productImg.length; i++) {
+    hoverColors[i] = '#007f00';
+    clickBackroundColors[i] = '#999999';
+  }
+
+
+  var data = {
+    labels: productImg.map(function(product) {
+      return product.imgName;
+    }),
+    datasets: [{
+      label: 'Clicks',
+      data: productImg.map(function(product) {
+        return product.click;
+      }),
+      backGroundColor: clickBackroundColors,
+      hoverBackgroundColor: hoverColors
+    }
+
+    ]
+  };
+  new Chart(context, {
+    type: 'bar',
+    data: data,
+    options: {
+      responsive: false
+    },
+    scales: [{
+      tick: {
+        beginAtZero: true
+      }
+    }]
+  });
+}
+
+retrieveLocalData();
 render();
+imgContainer.addEventListener('click', handleImageClick);
